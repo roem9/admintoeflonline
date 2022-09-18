@@ -71,8 +71,8 @@
             /* background-color: red; */
             width: 600px;
 			position: absolute;
-            left: 156px;
-			bottom: 82px;
+            left: 409px;
+			bottom: 83px;
             font-size: 11px;
             font-family: 'Roboto', sans-serif;
             word-spacing: 3px;
@@ -218,7 +218,7 @@
         </div>
         <div class="nilai"><p style="text-align: right; margin: 0px"><b><?= round($skor)?></b></p></div>
         <div class="nama"><p style="text-align: center; margin: 0px"><b><?= $nama?></b></p></div>
-        <div class="ttl"><p style="text-align: center; margin: 0px"><?= tgl_sertifikat(date("d-m-Y", strtotime($tgl_lahir)))?></p></div>
+        <div class="ttl"><p style="margin: 0px"><?= tgl_sertifikat(date("d-m-Y", strtotime($tgl_lahir)))?></p></div>
         <div class="listening"><p style="text-align: right; margin: 0px"><b><?= $listening?></b></p></div>
         <div class="structure"><p style="text-align: right; margin: 0px"><b><?= $structure?></b></p></div>
         <div class="reading"><p style="text-align: right; margin: 0px"><b><?= $reading?></b></p></div>

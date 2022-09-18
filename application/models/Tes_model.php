@@ -171,12 +171,27 @@ class Tes_model extends MY_Model {
         
         $date = date('Y', strtotime($tes['tgl_tes']));
 
+        // peserta toefl 
         $this->db->select("CONVERT(no_doc, UNSIGNED INTEGER) AS num");
         $this->db->from("peserta_toefl as a");
         $this->db->join("tes as b", "a.id_tes = b.id_tes");
-        // $this->db->where("YEAR(tgl_tes)", $date);
+        $this->db->where("YEAR(tgl_tes)", $date);
         $this->db->order_by("num", "DESC");
-        $data = $this->db->get()->row_array();
+        $data_toefl = $this->db->get()->row_array();
+        if($data_toefl) $data_toefl = $data_toefl['num'];
+        else $data_toefl = 0;
+
+        // peserta_bussiness
+        $this->db->select("CONVERT(no_doc, UNSIGNED INTEGER) AS num");
+        $this->db->from("peserta_bussiness as a");
+        $this->db->join("tes_peserta_bussiness as b", "a.id_peserta = b.id_peserta");
+        $this->db->where(["YEAR(tgl_tes)" => $date, "b.status" => "on"]);
+        $this->db->order_by("num", "DESC");
+        $data_bussiness = $this->db->get()->row_array();
+        if($data_bussiness) $data_bussiness = $data_bussiness['num'];
+        else $data_bussiness = 0;
+
+        $data = max($data_bussiness, $data_toefl);
 
         if($data) $no = $data['num']+1;
         else $no = 1;
