@@ -294,7 +294,9 @@ $(document).on("click", "#addItem .btnAdd", function(){
 
                 $(form+" [name='pilihan[]']").each(function(){
                     if($(this).val() != ""){
-                        pilihan += `"`+$(this).val()+`",`;
+                        // pilihan += `"`+$(this).val()+`",`;
+                        pilihan_jawaban = $(this).val().replace(/"/g, "&quot;")
+                        pilihan += `"`+pilihan_jawaban+`",`;
                     }
                 });
 
@@ -302,6 +304,9 @@ $(document).on("click", "#addItem .btnAdd", function(){
                 pilihan = pilihan.slice(0, -1)
 
                 let jawaban = $(form+" textarea[name='jawaban']").val();
+                // tambahan
+                jawaban = jawaban.replace(/"/g, "&quot;");
+                // tambahan
                 let penulisan = $(form+" select[name='penulisan']").val();
     
                 let eror = required(form);
@@ -768,13 +773,18 @@ $(document).on("click", "#editItem .btnEdit", function(){
                 let pilihan = "";
                 $(form+" [name='pilihan[]']").each(function(){
                     if($(this).val() != ""){
-                        pilihan += `"`+$(this).val()+`",`;
+                        // pilihan += `"`+$(this).val()+`",`;
+                        pilihan_jawaban = $(this).val().replace(/"/g, "&quot;")
+                        pilihan += `"`+pilihan_jawaban+`",`;
                     }
                 });
                 // remove last character 
                 pilihan = pilihan.slice(0, -1)
 
                 let jawaban = $(form+" textarea[name='jawaban']").val();
+                // tambahan
+                jawaban = jawaban.replace(/"/g, "&quot;");
+                // tambahan
                 let penulisan = $(form+" select[name='penulisan']").val();
     
                 let eror = required(form);

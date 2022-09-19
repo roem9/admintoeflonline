@@ -193,7 +193,7 @@ class Tes_model extends MY_Model {
 
         $data = max($data_bussiness, $data_toefl);
 
-        if($data) $no = $data['num']+1;
+        if($data) $no = $data+1;
         else $no = 1;
 
         if($no > 0 && $no < 10) $no_doc = "000".$no;
