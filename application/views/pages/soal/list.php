@@ -37,6 +37,7 @@
                             <table id="dataTable" class="table card-table table-vcenter text-nowrap text-dark">
                                 <thead>
                                     <tr>
+                                        <th class="text-dark desktop mobile-l mobile-p tablet-l tablet-p" style="font-size: 11px">Status</th>
                                         <th class="text-dark desktop mobile-l mobile-p tablet-l tablet-p" style="font-size: 11px">Nama Soal</th>
                                         <th class="text-dark desktop" style="font-size: 11px">Tipe Soal</th>
                                         <th class="text-dark desktop w-1" style="font-size: 11px">Soal</th>
