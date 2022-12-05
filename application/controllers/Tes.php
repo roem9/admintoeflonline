@@ -205,6 +205,13 @@ class Tes extends MY_Controller {
             $spreadsheet = new Spreadsheet;
 
             $semua_peserta = $this->tes->get_all("peserta_toefl", ["no_doc != " => ""]);
+            $semua_peserta_bussiness = $this->tes->get_all("peserta_bussiness", ["no_doc != " => ""]);
+
+            $semua_peserta = array_merge($semua_peserta, $semua_peserta_bussiness);
+            usort($semua_peserta, function($a, $b) {
+                return $a['no_doc'] <=> $b['no_doc'];
+            });
+
             $file_data = "Hasil Keseluruhan";
 
             $spreadsheet->setActiveSheetIndex(0)
@@ -243,8 +250,18 @@ class Tes extends MY_Controller {
             $kolom = 4;
             $nomor = 1;
             foreach($semua_peserta as $peserta) {
-                $tes = $this->tes->get_one("tes", ["id_tes" => $peserta['id_tes']]);
-                $tahun = date('y', strtotime($tes['tgl_tes']));
+                if(isset($peserta['id_tes'])){
+                    $tes = $this->tes->get_one("tes", ["id_tes" => $peserta['id_tes']]);
+                    $tahun = date('y', strtotime($tes['tgl_tes']));
+                } else {
+                    $tes = $this->tes->get_one("tes_peserta_bussiness", ["id_peserta" => $peserta['id_peserta'], "status" => "on"]);
+                    $tahun = date('y', strtotime($tes['tgl_tes']));
+                    $peserta['nama'] = $peserta['nama_peserta'];
+                    $peserta['nilai_listening'] = $tes['nilai_listening'];
+                    $peserta['nilai_structure'] = $tes['nilai_structure'];
+                    $peserta['nilai_reading'] = $tes['nilai_reading'];
+                    $peserta['no_wa'] = $peserta['no_hp'];
+                }
 
                 if($peserta['no_doc'] != "") $no_doc = "{$tahun}/{$peserta['no_doc']}";
                 else $no_doc = "-";
