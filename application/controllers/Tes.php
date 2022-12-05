@@ -200,6 +200,90 @@ class Tes extends MY_Controller {
                 }
             }
         }
+
+        public function downloadLaporan(){
+            $spreadsheet = new Spreadsheet;
+
+            $semua_peserta = $this->tes->get_all("peserta_toefl", ["no_doc != " => ""]);
+            $file_data = "Hasil Keseluruhan";
+
+            $spreadsheet->setActiveSheetIndex(0)
+                        ->setCellValue('A1', 'LIST SERTIFIKAT PESERTA')
+                        ->setCellValue('A2', 'No')
+                        ->setCellValue('B2', 'No. Sertifikat')
+                        ->setCellValue('C2', 'Nama')
+                        ->setCellValue('D2', 'TTL')
+                        ->setCellValue('E2', 'Alamat')
+                        ->setCellValue('F2', 'No. WA')
+                        ->setCellValue('G2', 'email')
+                        ->setCellValue('H2', 'Nilai Listening')
+                        ->setCellValue('H3', 'Benar')
+                        ->setCellValue('I3', 'Skor')
+                        ->setCellValue('J2', 'Nilai Structure')
+                        ->setCellValue('J3', 'Benar')
+                        ->setCellValue('K3', 'Skor')
+                        ->setCellValue('L2', 'Nilai Reading')
+                        ->setCellValue('L3', 'Benar')
+                        ->setCellValue('M3', 'Skor')
+                        ->setCellValue('N2', 'SKOR TOEFL');
+
+            $spreadsheet->getActiveSheet()->mergeCells('A2:A3')
+                        ->mergeCells('B2:B3')
+                        ->mergeCells('C2:C3')
+                        ->mergeCells('D2:D3')
+                        ->mergeCells('E2:E3')
+                        ->mergeCells('F2:F3')
+                        ->mergeCells('G2:G3')
+                        ->mergeCells('H2:I2')
+                        ->mergeCells('J2:K2')
+                        ->mergeCells('L2:M2')
+                        ->mergeCells('N2:N3')
+                        ->mergeCells('A1:N1');
+            
+            $kolom = 4;
+            $nomor = 1;
+            foreach($semua_peserta as $peserta) {
+                $tes = $this->tes->get_one("tes", ["id_tes" => $peserta['id_tes']]);
+                $tahun = date('y', strtotime($tes['tgl_tes']));
+
+                if($peserta['no_doc'] != "") $no_doc = "{$tahun}/{$peserta['no_doc']}";
+                else $no_doc = "-";
+
+                    $spreadsheet->setActiveSheetIndex(0)
+                                ->setCellValue('A' . $kolom, $nomor)
+                                ->setCellValue('B' . $kolom, $no_doc)
+                                ->setCellValue('C' . $kolom, $peserta['nama'])
+                                ->setCellValue('D' . $kolom, $peserta['t4_lahir'] . ", " . tgl_indo($peserta['tgl_lahir']))
+                                ->setCellValue('E' . $kolom, $peserta['alamat'])
+                                ->setCellValue('F' . $kolom, $peserta['no_wa'])
+                                ->setCellValue('G' . $kolom, $peserta['email'])
+                                ->setCellValue('H' . $kolom, $peserta['nilai_listening'])
+                                ->setCellValue('I' . $kolom, poin("Listening", $peserta['nilai_listening']))
+                                ->setCellValue('J' . $kolom, $peserta['nilai_structure'])
+                                ->setCellValue('K' . $kolom, poin("Structure", $peserta['nilai_structure']))
+                                ->setCellValue('L' . $kolom, $peserta['nilai_reading'])
+                                ->setCellValue('M' . $kolom, poin("Reading", $peserta['nilai_reading']))
+                                ->setCellValue('N' . $kolom, skor($peserta['nilai_listening'], $peserta['nilai_structure'], $peserta['nilai_reading']));
+    
+                    $kolom++;
+                    $nomor++;
+    
+            }
+
+            foreach(range('A','N') as $columnID) {
+                $spreadsheet->getActiveSheet()->getColumnDimension($columnID)
+                    ->setAutoSize(true);
+            }
+
+            $writer = new Xlsx($spreadsheet);
+
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="'.$file_data.'.xlsx"');
+            header('Cache-Control: max-age=0');
+
+            $writer->save('php://output');
+            
+        }
     // excel
 
     public function sertifikat($id){

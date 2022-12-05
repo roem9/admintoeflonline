@@ -63,6 +63,25 @@
                 </span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url()?>tes/downloadLaporan">
+                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <svg width="24" height="24">
+                        <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-receipt" />
+                    </svg>
+                </span>
+                <span class="nav-link-title">
+                    Laporan
+                </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void">
+                    <span class="nav-link-title">
+                        Total Sertifikat = <?= totalSertifikat();?>
+                    </span>
+                </a>
+            </li>
         </div>
         </div>
     </div>

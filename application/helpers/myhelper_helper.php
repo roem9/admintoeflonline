@@ -260,3 +260,11 @@
 
         return $soal;
     }
+
+    function totalSertifikat(){
+        $CI =& get_instance();
+        $peserta_toefl = COUNT($CI->db->from("peserta_toefl")->where(["no_doc !=" => ""])->get()->result_array());
+        $peserta_bussiness = COUNT($CI->db->from("peserta_bussiness")->where(["no_doc !=" => ""])->get()->result_array());
+
+        return $peserta_toefl + $peserta_bussiness;
+    }
